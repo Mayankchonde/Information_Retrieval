@@ -5,6 +5,3 @@ nltk==3.7
 numpy
 bs4
 sklearn
-from nltk.tokenize import sent_tokenize
-from nltk.corpus import stopwords
-
