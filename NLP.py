@@ -1,3 +1,4 @@
+#installing 
 !pip install beautifulsoup4 scikit-learn nltk
 import streamlit as st
 import requests
