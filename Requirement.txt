@@ -5,4 +5,3 @@ nltk==3.7
 numpy
 bs4
 sklearn
-nltk.tokenize
