@@ -6,7 +6,7 @@ from nltk.tokenize import sent_tokenize
 from nltk.corpus import stopwords
 from sklearn.metrics.pairwise import cosine_similarity
 import nltk
-nltk.download('stopwords')
+nltk.download('punkt')
 def extract_text(urls):
     data = []
     for url in urls:
