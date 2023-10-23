@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Sep 28 22:47:34 2023
-
-@author: mayan_izchdl9
-"""
 
 import streamlit as st
 from datetime import datetime
