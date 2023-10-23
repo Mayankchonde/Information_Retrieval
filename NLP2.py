@@ -1,43 +1,46 @@
 import streamlit as st
+import requests
+from bs4 import BeautifulSoup
+from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.tokenize import sent_tokenize
 from nltk.corpus import stopwords
-from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-
-def preprocess_text(text):
-    sentences = sent_tokenize(text.lower())
-    flat_sentences = ' '.join(sentences)
+import nltk
+nltk.download('punkt')
+def extract_text(urls):
+    data = []
+    for url in urls:
+        req = requests.get(url)
+        soup = BeautifulSoup(req.text, 'html.parser')
+        article_text = ' '.join([p.get_text() for p in soup.find_all('p')])
+        data.append(article_text)
+    return data
+def process_and_vectorize(data):
+    sentences = [sent_tokenize(text.lower()) for text in data]
+    flat_sentences = [sentence for sublist in sentences for sentence in sublist]
     stop_words = set(stopwords.words('english'))
-    filtered_sentence = ' '.join([word for word in flat_sentences.split() if word not in stop_words])
-    return filtered_sentence
-
-def main():
-    st.title("Search Engine App")
-
-    # Sample data
-    da = ['Stock market is basically buying and selling a stocks. Usually now peoples are buying and selling a stocks online', 'money questions arise when it comes to loss of money']
-
-    # Tokenize and preprocess sentences
-    processed_sentences = [preprocess_text(text) for text in da]
-
-    # TF-IDF Vectorization
+    filtered_sentences = [' '.join([word for word in sentence.split() if word not in stop_words]) for sentence in flat_sentences]
     vectorizer = TfidfVectorizer()
-    tfidf_matrix = vectorizer.fit_transform(processed_sentences)
+    tfidf_matrix = vectorizer.fit_transform(filtered_sentences)
+    return vectorizer, tfidf_matrix, flat_sentences
 
-    # User input
-    user_input = st.text_input("Enter your query:", "").lower()
-    user_input = preprocess_text(user_input)
-
-    # Calculate cosine similarity
+# Function to perform search
+def perform_search(user_input, vectorizer, tfidf_matrix, flat_sentences):
+    stop_words = set(stopwords.words('english'))
+    user_input = ' '.join([word for word in user_input.split() if word not in stop_words])
     user_tfidf = vectorizer.transform([user_input])
     similarity_scores = cosine_similarity(user_tfidf, tfidf_matrix)
-
-    # Get the most relevant sentence
     most_relevant_sentence_index = similarity_scores.argmax()
+    return flat_sentences[most_relevant_sentence_index]
+st.title("Stock Market Search Engine")
+user_query = st.text_input("Enter your query:")
+stock_urls = ['https://www.indiainfoline.com/knowledge-center/share-market/share-market-investment-guide-for-beginners']
 
-    # Display the most relevant sentence
-    st.subheader("Most Relevant Sentence:")
-    st.write(processed_sentences[most_relevant_sentence_index])
+data = extract_text(stock_urls)
 
-if __name__ == "__main__":
-    main()
+vectorizer, tfidf_matrix, flat_sentences = process_and_vectorize(data)
+
+if user_query:
+    result = perform_search(user_query, vectorizer, tfidf_matrix, flat_sentences)
+    st.subheader("Most relevant information:")
+    st.write(result)
