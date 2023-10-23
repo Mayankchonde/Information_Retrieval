@@ -18,7 +18,7 @@ Run the Application:
 In your terminal, enter the following command to start the application:
 arduino
 Copy code
-streamlit run IR_Code.py
+streamlit run stock_market_search.py
 Use the Application:
 
 Once the application is running, you can access it through your web browser. A local URL will be displayed in the terminal. Open that URL in your browser.
