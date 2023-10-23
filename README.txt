@@ -7,11 +7,11 @@ How to Run
 Prerequisites:
 Make sure you have Python installed on your system.
 Install the required libraries by running pip install streamlit requests beautifulsoup4 scikit-learn nltk in your terminal.
+
 Clone the Repository:
-
 If you haven't already, clone this repository to your local machine.
-Navigate to the Application Folder:
 
+Navigate to the Application Folder:
 Open your terminal and navigate to the folder containing the application files.
 Run the Application:
 
@@ -25,9 +25,10 @@ Once the application is running, you can access it through your web browser. A l
 Search for Stock Market Information:
 
 You can enter your stock market-related queries in the provided text input box and submit them.
-View Results:
 
+View Results:
 The application will process your query, and the most relevant information will be displayed on the page.
+
 Dependencies
 Streamlit
 Requests
